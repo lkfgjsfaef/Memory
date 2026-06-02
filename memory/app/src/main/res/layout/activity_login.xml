@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <!-- Decorative Header -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="💕"
+        android:textSize="48sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Memory"
+        android:textColor="@color/primary"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        android:letterSpacing="0.1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="珍藏每一个闪亮的瞬间"
+        android:textColor="#c9a87c"
+        android:textSize="14sp"
+        android:layout_marginBottom="32dp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp"
+        app:strokeColor="@color/card_stroke"
+        app:strokeWidth="0.5dp"
+        android:layout_marginBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选择用户"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- User selection cards -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/user_card_his"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:strokeWidth="1dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/user_avatar_his"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_avatar_default"
+                            android:background="@drawable/avatar_bg_his"
+                            android:scaleType="centerCrop"
+                            android:layout_marginBottom="2dp" />
+                        <TextView android:id="@+id/user_card_his_name"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="酱酱" android:textSize="13sp" android:textColor="@color/text_primary" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="他" android:textSize="11sp" android:textColor="@color/text_secondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/user_card_her"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:strokeWidth="1dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/user_avatar_her"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_avatar_default"
+                            android:background="@drawable/avatar_bg_her"
+                            android:scaleType="centerCrop"
+                            android:layout_marginBottom="2dp" />
+                        <TextView android:id="@+id/user_card_her_name"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="菲菲" android:textSize="13sp" android:textColor="@color/text_primary" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="她" android:textSize="11sp" android:textColor="@color/text_secondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="密码"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:hint="请输入密码" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Inline error -->
+            <TextView
+                android:id="@+id/login_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#E53935"
+                android:textSize="13sp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/login_button"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="登录"
+                android:textSize="16sp"
+                app:cornerRadius="14dp"
+                android:layout_marginTop="24dp"
+                app:backgroundTint="@color/primary"
+                android:textColor="@color/white" />
+
+            <ProgressBar
+                android:id="@+id/login_progress"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:indeterminateTint="@color/primary" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

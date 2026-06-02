@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:paddingTop="48dp">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="日常详情"
+        app:titleTextColor="@color/text_primary" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="64dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/daily_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
+
+            <!-- Meta row: mood + author + date + location -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/daily_mood_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="😊"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:id="@+id/daily_mood_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="16dp" />
+
+                <TextView
+                    android:id="@+id/daily_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="16dp" />
+
+                <TextView
+                    android:id="@+id/daily_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="16dp"
+                    android:drawableStart="@drawable/ic_calendar"
+                    android:drawablePadding="4dp" />
+
+                <TextView
+                    android:id="@+id/daily_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:drawableStart="@drawable/ic_location"
+                    android:drawablePadding="4dp" />
+            </LinearLayout>
+
+            <!-- Content -->
+            <TextView
+                android:id="@+id/daily_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#5B4B3E"
+                android:textSize="16sp"
+                android:lineSpacingExtra="6dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Photos section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="照片"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/daily_photo_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/daily_photos_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="4dp"
+                android:horizontalSpacing="4dp" />
+
+            <!-- No photos placeholder -->
+            <TextView
+                android:id="@+id/daily_no_photos"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:text="暂无照片"
+                android:textColor="@color/text_hint"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include
+        layout="@layout/music_player_bar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp" />
+</LinearLayout>

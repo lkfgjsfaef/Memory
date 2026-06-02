@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/music_player_bar"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@color/white"
+    android:elevation="6dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="4dp"
+    android:visibility="visible">
+
+    <!-- Hint text (shown when no song playing) -->
+    <TextView
+        android:id="@+id/music_hint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="🎵 点击这里播放音乐"
+        android:textColor="@color/primary"
+        android:textSize="14sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginStart="10dp" />
+
+    <!-- Album art thumbnail -->
+    <ImageView
+        android:id="@+id/music_thumb"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="歌曲封面"
+        android:background="@drawable/image_placeholder"
+        android:visibility="gone" />
+
+    <!-- Song info -->
+    <LinearLayout
+        android:id="@+id/music_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/music_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever" />
+
+        <TextView
+            android:id="@+id/music_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!-- Progress bar (thin, shows on bar) -->
+    <ProgressBar
+        android:id="@+id/music_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_weight="0" />
+
+    <!-- Play/Pause -->
+    <ImageButton
+        android:id="@+id/music_play_pause"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_play"
+        android:contentDescription="播放/暂停" />
+
+    <!-- Next -->
+    <ImageButton
+        android:id="@+id/music_next"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_next"
+        android:contentDescription="下一首" />
+
+    <!-- Playlist -->
+    <ImageButton
+        android:id="@+id/music_playlist_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_playlist"
+        android:contentDescription="播放列表" />
+
+    <!-- Close -->
+    <ImageButton
+        android:id="@+id/music_close"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_close"
+        android:contentDescription="关闭" />
+
+</LinearLayout>

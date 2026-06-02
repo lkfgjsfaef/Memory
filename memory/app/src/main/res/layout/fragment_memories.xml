@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:paddingTop="0dp">
+
+    <!-- Sub Tabs -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/memories_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:elevation="2dp"
+        app:tabSelectedTextColor="@color/primary"
+        app:tabTextColor="@color/text_secondary"
+        app:tabIndicatorColor="@color/primary"
+        app:tabIndicatorHeight="3dp"
+        app:tabRippleColor="@color/primary_light"
+        app:tabMode="fixed">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="足迹地图" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="记忆长河" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="相册" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <!-- Sub Tab Content Container -->
+    <FrameLayout
+        android:id="@+id/memories_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Map Tab -->
+        <FrameLayout
+            android:id="@+id/tab_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <org.osmdroid.views.MapView
+                    android:id="@+id/map_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/location_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="目前去过了 0 个地方"
+                    android:textColor="#8B7355"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@color/white" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/locations_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:padding="8dp" />
+            </LinearLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="16dp"
+                android:contentDescription="添加足迹"
+                android:src="@drawable/ic_add"
+                app:backgroundTint="@color/primary"
+                app:tint="@color/white"
+                app:elevation="6dp" />
+        </FrameLayout>
+
+        <!-- River Tab -->
+        <LinearLayout
+            android:id="@+id/tab_river"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/moments_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="📖\n\n暂无记忆瞬间\n点击右下角 + 添加"
+                    android:textColor="#c9a87c"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="4dp"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/moments_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:padding="16dp" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_add_moment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_margin="16dp"
+                    android:contentDescription="添加瞬间"
+                    android:src="@drawable/ic_add"
+                    app:backgroundTint="@color/primary"
+                    app:tint="@color/white"
+                    app:elevation="6dp" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Albums Tab -->
+        <LinearLayout
+            android:id="@+id/tab_albums"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/albums_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="📷\n\n暂无相册\n点击右下角 + 创建"
+                    android:textColor="#c9a87c"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="4dp"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/albums_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:padding="16dp" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_add_album"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_margin="16dp"
+                    android:contentDescription="添加相册"
+                    android:src="@drawable/ic_add"
+                    app:backgroundTint="@color/primary"
+                    app:tint="@color/white"
+                    app:elevation="6dp" />
+            </FrameLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="4dp"
+    app:strokeColor="@color/card_stroke"
+    app:strokeWidth="0.5dp"
+    android:layout_marginEnd="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Image -->
+        <ImageView
+            android:id="@+id/location_image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"
+            android:contentDescription="足迹照片"
+            android:background="@drawable/image_placeholder" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <!-- City + Province -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/location_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/location_province"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginStart="6dp"
+                    android:maxLines="1" />
+            </LinearLayout>
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/location_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#8B7355"
+                android:textSize="13sp"
+                android:layout_marginTop="4dp"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Date -->
+            <TextView
+                android:id="@+id/location_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp" />
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="6dp">
+
+                <TextView
+                    android:id="@+id/location_nav_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:text="📍 定位"
+                    android:textSize="12sp"
+                    android:textColor="#4A90D9"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground" />
+
+                <TextView
+                    android:id="@+id/location_edit_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:layout_weight="1"
+                    android:text="✏️ 编辑"
+                    android:textSize="11sp"
+                    android:textColor="#8B7355"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground" />
+
+                <TextView
+                    android:id="@+id/location_delete_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:layout_weight="1"
+                    android:text="🗑️ 删除"
+                    android:textSize="11sp"
+                    android:textColor="#E53935"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

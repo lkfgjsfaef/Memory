@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: menmory
+  datasource:
+    url: jdbc:mysql://localhost:3306/memory_db?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: root
+    password: "123456"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8081
+
+logging:
+  level:
+    com.niit: DEBUG
+    com.zaxxer.hikari: DEBUG
+    org.springframework.jdbc: DEBUG
+    org.springframework.web: DEBUG
+
+app:
+  jwt:
+    secret: "MemoryAppJwtSecretKey2026ForShuaiFengAndTianTian"
+    expiration: 604800000
+  qiniu:
+    access-key: KxTPc6rK3Nw2nTLzGnWITZ3jjG5SAEjnhSXPQWRf
+    secret-key: GdtaLx8kPIxsBk5Cvg_Fo5b28PXNZH4j-BJP8BI-
+    bucket: voyageartpicture
+    domain: http://www.voyageart.top
+    upload-url: https://upload-as0.qiniup.com
+    token-expires: 1800

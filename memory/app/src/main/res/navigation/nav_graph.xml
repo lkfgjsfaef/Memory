@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.niit.memory.ui.screens.home.HomeFragment"
+        android:label="首页"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_daily"
+        android:name="com.niit.memory.ui.screens.daily.DailyFragment"
+        android:label="日常"
+        tools:layout="@layout/fragment_daily" />
+
+    <fragment
+        android:id="@+id/nav_calendar"
+        android:name="com.niit.memory.ui.screens.calendar.CalendarFragment"
+        android:label="日历"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/nav_wishlist"
+        android:name="com.niit.memory.ui.screens.wishlist.WishlistFragment"
+        android:label="心愿"
+        tools:layout="@layout/fragment_wishlist" />
+
+    <fragment
+        android:id="@+id/nav_memories"
+        android:name="com.niit.memory.ui.screens.memories.MemoriesFragment"
+        android:label="回忆"
+        tools:layout="@layout/fragment_memories" />
+</navigation>

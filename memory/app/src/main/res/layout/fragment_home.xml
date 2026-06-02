@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Hero Section - Days Counter Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFDF9"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:gravity="center">
+
+                <!-- "修炼爱情已经" label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="修炼爱情已经"
+                    android:textColor="#c9a87c"
+                    android:textSize="14sp"
+                    android:letterSpacing="0.08" />
+
+                <!-- Days count + unit -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="bottom"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/days_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/primary"
+                        android:textSize="72sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="天"
+                        android:textColor="#c9a87c"
+                        android:textSize="20sp"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+
+                <!-- Love start date -->
+                <TextView
+                    android:id="@+id/love_start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="从 2026-03-16 起…"
+                    android:textColor="#c0a880"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="24dp" />
+
+                <!-- Avatar row with heartbeat -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <!-- His avatar -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/avatar_his"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:src="@drawable/ic_avatar_default"
+                            android:background="@drawable/avatar_bg_his"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:contentDescription="他的头像"
+                            android:scaleType="centerCrop" />
+
+                        <TextView
+                            android:id="@+id/avatar_his_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="他"
+                            android:textSize="13sp"
+                            android:textColor="#8B7355"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+
+                    <!-- Heartbeat line (placeholder) -->
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="💗"
+                        android:textSize="28sp"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Her avatar -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/avatar_her"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:src="@drawable/ic_avatar_default"
+                            android:background="@drawable/avatar_bg_her"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:contentDescription="她的头像"
+                            android:scaleType="centerCrop" />
+
+                        <TextView
+                            android:id="@+id/avatar_her_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="她"
+                            android:textSize="13sp"
+                            android:textColor="#8B7355"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Important Dates Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="重要日子"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/btn_add_important_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+ 添加"
+                android:textColor="@color/accent"
+                android:textSize="14sp"
+                android:padding="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/dates_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="加载中..."
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/important_dates_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Quick Actions - 2x2 Grid -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="快捷入口"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/action_daily"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="3dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="0.5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📝" android:textSize="24sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="日常记录" android:textSize="13sp" android:textColor="@color/text_primary" android:layout_marginTop="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="吃、喝、玩、睡" android:textSize="10sp" android:textColor="@color/text_secondary" android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/action_wishlist"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="3dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="0.5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💝" android:textSize="24sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="心愿清单" android:textSize="13sp" android:textColor="@color/text_primary" android:layout_marginTop="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="你的梦想，我陪你实现" android:textSize="10sp" android:textColor="@color/text_secondary" android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/action_calendar"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="3dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="0.5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🗓️" android:textSize="24sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="恋爱日历" android:textSize="13sp" android:textColor="@color/text_primary" android:layout_marginTop="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="重要日子都帮你记下来" android:textSize="10sp" android:textColor="@color/text_secondary" android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/action_memories"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="3dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="0.5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📸" android:textSize="24sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="珍藏回忆" android:textSize="13sp" android:textColor="@color/text_primary" android:layout_marginTop="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="珍藏独一无二的瞬间" android:textSize="10sp" android:textColor="@color/text_secondary" android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Mini Calendar -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="恋爱日历"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:strokeColor="@color/card_stroke"
+            app:strokeWidth="0.5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <!-- Month navigation -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp">
+                    <TextView
+                        android:id="@+id/cal_prev_month"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="◀"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true" />
+                    <TextView
+                        android:id="@+id/mini_calendar_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/accent"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+                    <TextView
+                        android:id="@+id/cal_next_month"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="▶"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+
+                <!-- Day of week headers -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="2dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="日" android:textSize="11sp" android:textColor="#FFE8C0C0" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="一" android:textSize="11sp" android:textColor="#ccc" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="二" android:textSize="11sp" android:textColor="#ccc" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="三" android:textSize="11sp" android:textColor="#ccc" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="四" android:textSize="11sp" android:textColor="#ccc" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="五" android:textSize="11sp" android:textColor="#ccc" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="六" android:textSize="11sp" android:textColor="#FFE8C0C0" android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mini_calendar_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Bottom spacing -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
+    app:strokeColor="@color/card_stroke"
+    app:strokeWidth="0.5dp"
+    android:layout_marginBottom="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Cover image / emoji placeholder -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp">
+
+            <ImageView
+                android:id="@+id/moment_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:contentDescription="封面"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/moment_emoji_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="💫"
+                android:textSize="48sp"
+                android:gravity="center"
+                android:background="#FAF5F0"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <!-- Photos thumbnails row -->
+        <LinearLayout
+            android:id="@+id/moment_photos_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/moment_emoji"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💫"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="6dp" />
+
+                <TextView
+                    android:id="@+id/moment_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:id="@+id/moment_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="12dp" />
+
+                <TextView
+                    android:id="@+id/moment_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:drawableStart="@drawable/ic_location"
+                    android:drawablePadding="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/moment_edit_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"
+                    android:text="编辑"
+                    android:textSize="13sp"
+                    android:textColor="#8B7355"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/spinner_bg" />
+
+                <TextView
+                    android:id="@+id/moment_delete_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"
+                    android:text="删除"
+                    android:textSize="13sp"
+                    android:textColor="#E53935"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/spinner_bg"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

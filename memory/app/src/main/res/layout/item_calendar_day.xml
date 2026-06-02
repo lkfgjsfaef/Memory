@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/day_number"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp"
+        android:background="@drawable/day_cell_bg" />
+
+    <TextView
+        android:id="@+id/day_dot"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/dot"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/day_mood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:visibility="gone" />
+</LinearLayout>

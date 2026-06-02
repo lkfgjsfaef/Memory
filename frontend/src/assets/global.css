@@ -1,0 +1,154 @@
+/* Global CSS Variables and Reset */
+:root {
+  --bg-primary: #FAF5ED;
+  --bg-card: #FFFFFF;
+  --color-orange: #FFA500;
+  --color-orange-light: #F8D7C4;
+  --color-pink: #F9E7F1;
+  --color-pink-deep: #FFB6C1;
+  --color-yellow: #FFF5D9;
+  --color-blue-light: #D4F0FF;
+  --color-green-light: #E8F5E9;
+  --color-red: #E53935;
+  --color-purple: #B388FF;
+  --text-dark: #333333;
+  --text-gray: #777777;
+  --text-light: #999999;
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-dark);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: var(--font-family);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 3px;
+}
+
+/* Common utility classes */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin-bottom: 20px;
+}
+
+.btn-primary {
+  background: var(--color-orange);
+  color: white;
+  border-radius: 20px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-outline {
+  background: white;
+  color: var(--text-dark);
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover {
+  border-color: var(--color-orange);
+  color: var(--color-orange);
+}
+
+.btn-outline.active {
+  background: var(--color-orange-light);
+  border-color: var(--color-orange);
+  color: var(--color-orange);
+}
+
+/* Entrance animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-fade-in    { animation: fadeIn 0.4s ease-out both; }
+.animate-fade-in-up { animation: fadeInUp 0.5s ease-out both; }
+.animate-scale-in   { animation: scaleIn 0.4s ease-out both; }
+
+.animate-stagger > * {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+.animate-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.animate-stagger > *:nth-child(2) { animation-delay: 60ms; }
+.animate-stagger > *:nth-child(3) { animation-delay: 120ms; }
+.animate-stagger > *:nth-child(4) { animation-delay: 180ms; }
+.animate-stagger > *:nth-child(5) { animation-delay: 240ms; }
+.animate-stagger > *:nth-child(6) { animation-delay: 300ms; }
+.animate-stagger > *:nth-child(7) { animation-delay: 360ms; }
+.animate-stagger > *:nth-child(8) { animation-delay: 420ms; }
+.animate-stagger > *:nth-child(9) { animation-delay: 480ms; }
+.animate-stagger > *:nth-child(10) { animation-delay: 540ms; }

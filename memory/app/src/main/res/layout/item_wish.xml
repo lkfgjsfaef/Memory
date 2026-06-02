@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
+    app:strokeColor="@color/card_stroke"
+    app:strokeWidth="0.5dp"
+    android:layout_marginBottom="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header: avatar + category + author + actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/wish_avatar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:text="👦"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:background="@drawable/avatar_bg_his"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/wish_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textColor="@color/white"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="3dp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/wish_author"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#c0a880"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/wish_edit_btn"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:text="✏️"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <TextView
+                android:id="@+id/wish_delete_btn"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:text="🗑️"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+        </LinearLayout>
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/wish_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/wish_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#8B7B8B"
+            android:textSize="13sp"
+            android:layout_marginTop="4dp"
+            android:maxLines="3"
+            android:ellipsize="end" />
+
+        <!-- Images -->
+        <LinearLayout
+            android:id="@+id/wish_images_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
+        <!-- Footer: date + status badge -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/wish_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#c9a87c"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/wish_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/chip_bg" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="16dp"
+    android:paddingBottom="8dp"
+    android:paddingHorizontal="4dp">
+
+    <TextView
+        android:id="@+id/timeline_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⭐"
+        android:textSize="18sp"
+        android:layout_marginEnd="8dp" />
+
+    <TextView
+        android:id="@+id/timeline_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="#8B7355"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/timeline_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:background="@drawable/badge_bg"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="2dp" />
+</LinearLayout>

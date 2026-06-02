@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="首页" />
+    <item
+        android:id="@+id/nav_daily"
+        android:icon="@drawable/ic_daily"
+        android:title="日常" />
+    <item
+        android:id="@+id/nav_calendar"
+        android:icon="@drawable/ic_calendar"
+        android:title="日历" />
+    <item
+        android:id="@+id/nav_wishlist"
+        android:icon="@drawable/ic_wishlist"
+        android:title="心愿" />
+    <item
+        android:id="@+id/nav_memories"
+        android:icon="@drawable/ic_memories"
+        android:title="回忆" />
+
+</menu>
