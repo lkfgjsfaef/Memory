@@ -39,6 +39,7 @@ public class ImageViewer {
         root.setBackgroundColor(0xFF000000);
 
         ViewPager2 pager = new ViewPager2(context);
+        pager.setOffscreenPageLimit(1);
         pager.setAdapter(new ImagePageAdapter(context, imageUrls, () -> dialog.dismiss()));
         pager.setCurrentItem(safePosition, false);
         root.addView(pager, new FrameLayout.LayoutParams(
@@ -88,11 +89,19 @@ public class ImageViewer {
         private final Context context;
         private final List<String> urls;
         private final Runnable onDismiss;
+        private final int maxWidth;
+        private final int maxHeight;
 
         ImagePageAdapter(Context context, List<String> urls, Runnable onDismiss) {
             this.context = context;
             this.urls = urls;
             this.onDismiss = onDismiss;
+            android.graphics.Point size = new android.graphics.Point();
+            android.view.WindowManager wm = (android.view.WindowManager)
+                context.getSystemService(Context.WINDOW_SERVICE);
+            wm.getDefaultDisplay().getSize(size);
+            this.maxWidth = size.x / 2;
+            this.maxHeight = size.y / 2;
         }
 
         @NonNull
@@ -111,6 +120,8 @@ public class ImageViewer {
                 new ImageRequest.Builder(context)
                     .data(urls.get(pos))
                     .target(holder.imageView)
+                    .size(maxWidth, maxHeight)
+                    .crossfade(true)
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder)
                     .build()
