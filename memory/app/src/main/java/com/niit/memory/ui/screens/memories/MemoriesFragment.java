@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.tabs.TabLayout;
 import com.niit.memory.databinding.FragmentMemoriesBinding;
@@ -208,7 +209,7 @@ public class MemoriesFragment extends Fragment {
         binding.locationsList.setAdapter(locationAdapter);
 
         binding.albumsList.setLayoutManager(
-            new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            new GridLayoutManager(getContext(), 2));
         albumAdapter = new MemoryAlbumAdapter(
             id -> {
                 Intent intent = new Intent(getContext(), AlbumDetailActivity.class);

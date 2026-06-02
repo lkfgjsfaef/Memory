@@ -114,8 +114,7 @@ public class DailyDetailActivity extends AppCompatActivity {
                     .error(R.drawable.image_placeholder)
                     .build()
             );
-            final String url = photoList.get(pos);
-            iv.setOnClickListener(v -> ImageViewer.show(DailyDetailActivity.this, url));
+            iv.setOnClickListener(v -> ImageViewer.show(DailyDetailActivity.this, photoList, pos));
             return iv;
         }
     }

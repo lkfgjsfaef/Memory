@@ -294,7 +294,7 @@ public class MomentDetailActivity extends AppCompatActivity {
                     .show();
                 return true;
             });
-            iv.setOnClickListener(v -> ImageViewer.show(MomentDetailActivity.this, photoList.get(pos)));
+            iv.setOnClickListener(v -> ImageViewer.show(MomentDetailActivity.this, photoList, pos));
             return iv;
         }
     }

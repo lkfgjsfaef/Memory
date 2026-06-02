@@ -108,6 +108,9 @@ dependencies {
     // Qiniu upload
     implementation("com.qiniu:qiniu-android-sdk:8.2.0")
 
+    // ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+
     // Gson
     implementation("com.google.code.gson:gson:2.11.0")
 }

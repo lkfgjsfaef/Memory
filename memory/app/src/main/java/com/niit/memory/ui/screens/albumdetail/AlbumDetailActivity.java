@@ -323,7 +323,7 @@ public class AlbumDetailActivity extends AppCompatActivity {
                     .show();
                 return true;
             });
-            iv.setOnClickListener(v -> ImageViewer.show(AlbumDetailActivity.this, photoList.get(pos)));
+            iv.setOnClickListener(v -> ImageViewer.show(AlbumDetailActivity.this, photoList, pos));
             return iv;
         }
     }
