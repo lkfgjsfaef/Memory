@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.niit.memory.data.model.LoginResponse;
 import com.niit.memory.data.repository.AuthRepository;
 import com.niit.memory.util.SessionManager;
+import com.niit.memory.util.TaskExecutor;
 
 public class LoginViewModel extends AndroidViewModel {
 
@@ -33,7 +34,7 @@ public class LoginViewModel extends AndroidViewModel {
     public void login(String username, String password) {
         loading.setValue(true);
         Log.d(TAG, "Attempting login for user: " + username);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 LoginResponse resp = repository.login(username, password);
                 if (resp == null || resp.getToken() == null) {
@@ -53,6 +54,6 @@ public class LoginViewModel extends AndroidViewModel {
                 loading.postValue(false);
                 errorMessage.postValue(e.getMessage() != null ? e.getMessage() : "登录失败");
             }
-        }).start();
+        });
     }
 }

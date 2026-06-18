@@ -122,11 +122,16 @@ public class ImageViewer {
                     .target(holder.imageView)
                     .size(maxWidth, maxHeight)
                     .crossfade(true)
+                    .allowHardware(false)
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder)
                     .build()
             );
             holder.imageView.setOnClickListener(v -> onDismiss.run());
+            holder.imageView.setOnLongClickListener(v -> {
+                ImageSaveUtil.saveViewToGallery(context, holder.imageView);
+                return true;
+            });
         }
 
         @Override

@@ -85,6 +85,7 @@ public class DailyDetailActivity extends AppCompatActivity {
         int count = photoList.size();
         binding.dailyPhotoCount.setText(count + " 张");
         binding.dailyPhotosGrid.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
+        binding.dailyPhotosSpacer.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
         binding.dailyNoPhotos.setVisibility(count > 0 ? View.GONE : View.VISIBLE);
     }
 

@@ -8,9 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import coil.Coil;
-import coil.request.ImageRequest;
 import com.niit.memory.R;
+import com.niit.memory.util.CoilHelper;
 import com.niit.memory.data.model.Song;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,13 +84,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
         String picUrl = song.getPicUrl();
         if (picUrl != null && !picUrl.isEmpty()) {
-            ImageRequest req = new ImageRequest.Builder(holder.itemView.getContext())
-                .data(picUrl)
-                .target(holder.thumb)
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_placeholder)
-                .build();
-            Coil.imageLoader(holder.itemView.getContext()).enqueue(req);
+            CoilHelper.loadImage(holder.itemView.getContext(), picUrl, holder.thumb,
+                R.drawable.image_placeholder, R.drawable.image_placeholder);
         } else {
             holder.thumb.setImageResource(R.drawable.image_placeholder);
         }

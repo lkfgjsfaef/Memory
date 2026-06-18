@@ -1,6 +1,7 @@
 package com.niit.memory.data.api;
 
 import android.content.Context;
+import com.niit.memory.BuildConfig;
 import com.niit.memory.util.SessionManager;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
@@ -16,12 +17,16 @@ public class ApiClient {
         if (retrofit == null) {
             SessionManager sessionManager = SessionManager.getInstance(context);
 
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
+                .addInterceptor(new AuthInterceptor(sessionManager));
 
-            OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new AuthInterceptor(sessionManager))
-                .addInterceptor(logging)
+            if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+                logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+                clientBuilder.addInterceptor(logging);
+            }
+
+            OkHttpClient client = clientBuilder
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)

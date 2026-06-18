@@ -9,6 +9,7 @@ import com.niit.memory.data.model.CalendarNote;
 import com.niit.memory.data.model.ImportantDate;
 import com.niit.memory.data.repository.CalendarRepository;
 import com.niit.memory.data.repository.HomeRepository;
+import com.niit.memory.util.TaskExecutor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class CalendarViewModel extends AndroidViewModel {
         currentYear.setValue(year);
         currentMonth.setValue(month);
         loading.setValue(true);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 List<CalendarNote> list = repository.getNotes(year, month);
                 notes.postValue(list != null ? list : new ArrayList<>());
@@ -53,7 +54,7 @@ public class CalendarViewModel extends AndroidViewModel {
                 loading.postValue(false);
                 errorMessage.postValue(e.getMessage());
             }
-        }).start();
+        });
     }
 
     private void reloadNotesInBackground(int year, int month) {
@@ -86,7 +87,7 @@ public class CalendarViewModel extends AndroidViewModel {
 
     public void addNote(String date, String text, String icon) {
         loading.setValue(true);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 int y = currentYear.getValue() != null ? currentYear.getValue() : 0;
                 int m = currentMonth.getValue() != null ? currentMonth.getValue() : 0;
@@ -103,12 +104,12 @@ public class CalendarViewModel extends AndroidViewModel {
                 loading.postValue(false);
                 errorMessage.postValue(e.getMessage());
             }
-        }).start();
+        });
     }
 
     public void deleteNote(long id) {
         loading.setValue(true);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 repository.deleteNote(id);
                 int year = currentYear.getValue() != null ? currentYear.getValue() : 0;
@@ -119,11 +120,11 @@ public class CalendarViewModel extends AndroidViewModel {
                 loading.postValue(false);
                 errorMessage.postValue(e.getMessage());
             }
-        }).start();
+        });
     }
 
     public void setMood(String date, String mood, String moodIcon) {
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 CalendarMood cm = new CalendarMood();
                 cm.setMoodDate(date);
@@ -139,12 +140,12 @@ public class CalendarViewModel extends AndroidViewModel {
             } catch (Exception e) {
                 errorMessage.postValue(e.getMessage());
             }
-        }).start();
+        });
     }
 
     public void deleteImportantDate(long id) {
         loading.setValue(true);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 homeRepository.deleteImportantDate(id);
                 List<ImportantDate> dates = homeRepository.getImportantDates();
@@ -154,7 +155,7 @@ public class CalendarViewModel extends AndroidViewModel {
                 loading.postValue(false);
                 errorMessage.postValue(e.getMessage());
             }
-        }).start();
+        });
     }
 
     public List<CalendarNote> getNotesForDate(String date) {

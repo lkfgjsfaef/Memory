@@ -9,6 +9,7 @@ import androidx.datastore.rxjava3.RxDataStore;
 import io.reactivex.rxjava3.core.Single;
 
 public class SessionManager {
+    private static final String TAG = "SessionManager";
     private static final String PREF_NAME = "memory_session";
     private static SessionManager instance;
     private final RxDataStore<Preferences> dataStore;
@@ -53,7 +54,7 @@ public class SessionManager {
             hisAvatarUrl = prefs.get(KEY_HIS_AVATAR_URL);
             herAvatarUrl = prefs.get(KEY_HER_AVATAR_URL);
         } catch (Exception e) {
-            // DataStore read may fail on first access; cache stays null, login will retry
+            android.util.Log.e("SessionManager", "Failed to load session from DataStore", e);
         }
     }
 
@@ -80,7 +81,7 @@ public class SessionManager {
             mp.set(KEY_NICKNAME, nickname != null ? nickname : "");
             mp.set(KEY_AVATAR_URL, avatarUrl != null ? avatarUrl : "");
             return Single.just(mp);
-        });
+        }).subscribe(prefs -> {}, error -> android.util.Log.e(TAG, "Failed to persist session", error));
     }
 
     public void saveAvatarUrl(String url) {
@@ -89,7 +90,7 @@ public class SessionManager {
             MutablePreferences mp = prefs.toMutablePreferences();
             mp.set(KEY_AVATAR_URL, url != null ? url : "");
             return Single.just(mp);
-        });
+        }).subscribe(prefs -> {}, error -> android.util.Log.e(TAG, "Failed to persist avatar", error));
     }
 
     public void saveHisAvatarUrl(String url) {
@@ -98,7 +99,7 @@ public class SessionManager {
             MutablePreferences mp = prefs.toMutablePreferences();
             mp.set(KEY_HIS_AVATAR_URL, url != null ? url : "");
             return Single.just(mp);
-        });
+        }).subscribe(prefs -> {}, error -> android.util.Log.e(TAG, "Failed to persist his avatar", error));
     }
 
     public void saveHerAvatarUrl(String url) {
@@ -107,7 +108,7 @@ public class SessionManager {
             MutablePreferences mp = prefs.toMutablePreferences();
             mp.set(KEY_HER_AVATAR_URL, url != null ? url : "");
             return Single.just(mp);
-        });
+        }).subscribe(prefs -> {}, error -> android.util.Log.e(TAG, "Failed to persist her avatar", error));
     }
 
     public void logout() {
@@ -116,7 +117,6 @@ public class SessionManager {
         this.username = null;
         this.nickname = null;
         this.avatarUrl = null;
-        // Keep hisAvatarUrl and herAvatarUrl — they are cached for login page display
         dataStore.updateDataAsync(prefs -> {
             MutablePreferences mp = prefs.toMutablePreferences();
             mp.set(KEY_TOKEN, "");
@@ -125,6 +125,6 @@ public class SessionManager {
             mp.set(KEY_NICKNAME, "");
             mp.set(KEY_AVATAR_URL, "");
             return Single.just(mp);
-        });
+        }).subscribe(prefs -> {}, error -> android.util.Log.e(TAG, "Failed to persist logout", error));
     }
 }

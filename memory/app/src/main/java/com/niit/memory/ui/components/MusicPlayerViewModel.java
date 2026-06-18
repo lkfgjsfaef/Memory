@@ -10,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import com.niit.memory.data.model.Song;
 import com.niit.memory.data.repository.MusicRepository;
+import com.niit.memory.util.TaskExecutor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class MusicPlayerViewModel extends AndroidViewModel {
     }
 
     public void loadPlaylist() {
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 List<Song> songs = repository.getPlaylist();
                 playlist.postValue(songs != null ? songs : new ArrayList<>());
@@ -52,7 +53,7 @@ public class MusicPlayerViewModel extends AndroidViewModel {
                 Log.e(TAG, "Error loading playlist", e);
                 errorMessage.postValue("加载播放列表失败");
             }
-        }).start();
+        });
     }
 
     public void setSearchCallback(Consumer<List<Song>> callback) {
@@ -64,7 +65,7 @@ public class MusicPlayerViewModel extends AndroidViewModel {
     }
 
     public void search(String keyword, Consumer<List<Song>> callback) {
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 List<Song> results = repository.search(keyword, 20);
                 List<Song> safe = results != null ? results : new ArrayList<>();
@@ -80,7 +81,7 @@ public class MusicPlayerViewModel extends AndroidViewModel {
                     errorMessage.setValue("搜索失败: " + e.getMessage());
                 });
             }
-        }).start();
+        });
     }
 
     public void addToPlaylist(Song song) {
@@ -127,7 +128,7 @@ public class MusicPlayerViewModel extends AndroidViewModel {
     }
 
     private void persistPlaylist(List<Song> songs) {
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 List<Map<String, Object>> data = new ArrayList<>();
                 for (Song s : songs) {
@@ -145,7 +146,7 @@ public class MusicPlayerViewModel extends AndroidViewModel {
                 Log.e(TAG, "Error saving playlist", e);
                 errorMessage.postValue("保存播放列表失败");
             }
-        }).start();
+        });
     }
 
     public void play(int index) {

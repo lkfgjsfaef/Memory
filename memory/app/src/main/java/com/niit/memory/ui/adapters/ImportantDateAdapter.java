@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.niit.memory.R;
+import com.niit.memory.util.ColorConstants;
 import com.niit.memory.data.model.ImportantDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,13 +50,13 @@ public class ImportantDateAdapter extends RecyclerView.Adapter<ImportantDateAdap
         long daysLeft = item.getDaysLeft() != null ? item.getDaysLeft() : 0;
         if (daysLeft > 0) {
             holder.daysLeft.setText("还有 " + daysLeft + " 天");
-            holder.daysLeft.setTextColor(0xFFE88D2E);
+            holder.daysLeft.setTextColor(ColorConstants.ACCENT_ORANGE);
         } else if (daysLeft == 0) {
             holder.daysLeft.setText("就是今天!");
-            holder.daysLeft.setTextColor(0xFF81C784);
+            holder.daysLeft.setTextColor(ColorConstants.STATUS_COMPLETED);
         } else {
             holder.daysLeft.setText("已过");
-            holder.daysLeft.setTextColor(0xFFC8BFB5);
+            holder.daysLeft.setTextColor(ColorConstants.TEXT_MUTED);
         }
 
         long progressLong = 200 - daysLeft;

@@ -1,9 +1,12 @@
 package com.niit.memory.ui.adapters;
 
+import android.content.Context;
 import androidx.appcompat.app.AlertDialog;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +16,7 @@ import coil.Coil;
 import coil.request.ImageRequest;
 import com.niit.memory.R;
 import com.niit.memory.data.model.DailyRecord;
+import com.niit.memory.util.ImageSaveUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,49 +62,72 @@ public class DailyRecordAdapter extends RecyclerView.Adapter<DailyRecordAdapter.
             + (item.getMood() != null ? item.getMood() : ""));
         holder.location.setText(item.getLocation() != null ? item.getLocation() : "");
 
-        // Load images
+        // Load images — only first 2, +N for the rest
         holder.imagesContainer.removeAllViews();
         holder.imagesContainer.setVisibility(View.GONE);
         String imageUrls = item.getImageUrls();
         if (imageUrls != null && !imageUrls.isEmpty()) {
-            holder.imagesContainer.setVisibility(View.VISIBLE);
+            List<String> validUrls = new ArrayList<>();
             for (String url : imageUrls.split(",")) {
-                String trimmed = url.trim();
-                if (!trimmed.isEmpty()) {
-                    ImageView iv = new ImageView(holder.itemView.getContext());
-                    int size = (int) (100 * holder.itemView.getContext().getResources().getDisplayMetrics().density);
+                String t = url.trim();
+                if (!t.isEmpty()) validUrls.add(t);
+            }
+            int total = validUrls.size();
+            if (total > 0) {
+                holder.imagesContainer.setVisibility(View.VISIBLE);
+                Context ctx = holder.itemView.getContext();
+                int size = (int) (100 * ctx.getResources().getDisplayMetrics().density);
+
+                int showCount = Math.min(total, 2);
+                for (int i = 0; i < showCount; i++) {
+                    final String imgUrl = validUrls.get(i);
+                    ImageView iv = new ImageView(ctx);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(size, size);
                     lp.setMargins(0, 0, 8, 0);
                     iv.setLayoutParams(lp);
                     iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     iv.setBackgroundResource(R.drawable.image_placeholder);
-                    ImageRequest req = new ImageRequest.Builder(holder.itemView.getContext())
-                        .data(trimmed)
-                        .target(iv)
+                    Coil.imageLoader(ctx).enqueue(new ImageRequest.Builder(ctx)
+                        .data(imgUrl).target(iv)
                         .placeholder(R.drawable.image_placeholder)
-                        .error(R.drawable.image_placeholder)
-                        .build();
-                    Coil.imageLoader(holder.itemView.getContext()).enqueue(req);
+                        .error(R.drawable.image_placeholder).build());
 
-                    final String imgUrl = trimmed;
-                    iv.setOnClickListener(v -> {
-                        AlertDialog.Builder b = new AlertDialog.Builder(holder.itemView.getContext());
-                        ImageView full = new ImageView(holder.itemView.getContext());
-                        full.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                        full.setBackgroundColor(0xFF000000);
-                        ImageRequest fullReq = new ImageRequest.Builder(holder.itemView.getContext())
-                            .data(imgUrl)
-                            .target(full)
-                            .build();
-                        Coil.imageLoader(holder.itemView.getContext()).enqueue(fullReq);
-                        AlertDialog dlg = b.setView(full).create();
-                        dlg.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT);
-                        dlg.getWindow().setBackgroundDrawableResource(android.R.color.black);
-                        full.setOnClickListener(ff -> dlg.dismiss());
-                        dlg.show();
-                    });
+                    iv.setOnClickListener(v -> showFullscreenDialog(ctx, imgUrl));
                     holder.imagesContainer.addView(iv);
+                }
+
+                // Show +N overlay on 3rd image position if more than 2
+                if (total > 2) {
+                    int remaining = total - 2;
+                    FrameLayout fl = new FrameLayout(ctx);
+                    LinearLayout.LayoutParams flp = new LinearLayout.LayoutParams(size, size);
+                    flp.setMargins(0, 0, 8, 0);
+                    fl.setLayoutParams(flp);
+
+                    ImageView bg = new ImageView(ctx);
+                    bg.setLayoutParams(new FrameLayout.LayoutParams(size, size));
+                    bg.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    bg.setBackgroundResource(R.drawable.image_placeholder);
+                    bg.setAlpha(0.35f);
+                    Coil.imageLoader(ctx).enqueue(new ImageRequest.Builder(ctx)
+                        .data(validUrls.get(2)).target(bg)
+                        .placeholder(R.drawable.image_placeholder)
+                        .error(R.drawable.image_placeholder).build());
+                    fl.addView(bg);
+
+                    TextView plusN = new TextView(ctx);
+                    plusN.setText("+" + remaining);
+                    plusN.setTextColor(0xFF000000);
+                    plusN.setTextSize(22);
+                    plusN.getPaint().setFakeBoldText(true);
+                    plusN.setGravity(Gravity.CENTER);
+                    FrameLayout.LayoutParams tp = new FrameLayout.LayoutParams(size, size);
+                    fl.addView(plusN, tp);
+
+                    fl.setOnClickListener(v -> {
+                        if (clickListener != null) clickListener.onClick(item);
+                    });
+                    holder.imagesContainer.addView(fl);
                 }
             }
         }
@@ -133,6 +160,25 @@ public class DailyRecordAdapter extends RecyclerView.Adapter<DailyRecordAdapter.
 
     @Override
     public int getItemCount() { return items.size(); }
+
+    private void showFullscreenDialog(Context ctx, String imgUrl) {
+        AlertDialog.Builder b = new AlertDialog.Builder(ctx);
+        ImageView full = new ImageView(ctx);
+        full.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        full.setBackgroundColor(0xFF000000);
+        Coil.imageLoader(ctx).enqueue(new ImageRequest.Builder(ctx)
+            .data(imgUrl).target(full).allowHardware(false).build());
+        AlertDialog dlg = b.setView(full).create();
+        dlg.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT);
+        dlg.getWindow().setBackgroundDrawableResource(android.R.color.black);
+        full.setOnClickListener(ff -> dlg.dismiss());
+        full.setOnLongClickListener(v -> {
+            ImageSaveUtil.saveViewToGallery(ctx, full);
+            return true;
+        });
+        dlg.show();
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView author, date, title, content, mood, location, editBtn, deleteBtn;

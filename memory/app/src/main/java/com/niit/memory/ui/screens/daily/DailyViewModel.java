@@ -4,19 +4,13 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import com.niit.memory.data.api.ApiClient;
-import com.niit.memory.data.api.QiniuService;
-import com.niit.memory.data.model.ApiResponse;
 import com.niit.memory.data.model.DailyRecord;
 import com.niit.memory.data.repository.DailyRepository;
+import com.niit.memory.util.QiniuHelper;
+import com.niit.memory.util.TaskExecutor;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.Response;
 
 public class DailyViewModel extends AndroidViewModel {
 
@@ -40,7 +34,7 @@ public class DailyViewModel extends AndroidViewModel {
         currentYear.postValue(year);
         currentMonth.postValue(month);
         loading.postValue(true);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 List<DailyRecord> list = repository.getRecords(year, month);
                 records.postValue(list != null ? list : new ArrayList<>());
@@ -50,7 +44,7 @@ public class DailyViewModel extends AndroidViewModel {
                 loading.postValue(false);
                 errorMessage.postValue(e.getMessage());
             }
-        }).start();
+        });
     }
 
     private void loadLoveDays() {
@@ -62,7 +56,7 @@ public class DailyViewModel extends AndroidViewModel {
                 loveDays.postValue(cr.getLoveDays());
             }
         } catch (Exception e) {
-            // Love days is optional, don't show error
+            android.util.Log.w("DailyViewModel", "Failed to load love days", e);
         }
     }
 
@@ -88,7 +82,7 @@ public class DailyViewModel extends AndroidViewModel {
                              String location, String mood, String moodIcon,
                              String recordDate, String imageUrls) {
         loading.setValue(true);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 DailyRecord record = new DailyRecord();
                 record.setTitle(title);
@@ -106,57 +100,18 @@ public class DailyViewModel extends AndroidViewModel {
                 loading.postValue(false);
                 errorMessage.postValue(e.getMessage());
             }
-        }).start();
+        });
     }
 
     public String uploadImage(File file) throws Exception {
-        QiniuService qiniu = ApiClient.getInstance(getApplication()).create(QiniuService.class);
-        Response<ApiResponse<Map<String, String>>> tokenResp = qiniu.getUploadToken().execute();
-        ApiResponse<Map<String, String>> tokenBody = tokenResp.body();
-        if (tokenBody == null || !tokenBody.isSuccess() || tokenBody.getData() == null) {
-            throw new Exception("获取上传token失败");
-        }
-        String token = tokenBody.getData().get("token");
-        String domain = tokenBody.getData().get("domain");
-
-        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient.Builder()
-            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-            .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
-            .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
-            .build();
-        RequestBody fileBody = RequestBody.create(file, MediaType.parse("image/*"));
-        MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), fileBody);
-
-        okhttp3.Request uploadReq = new okhttp3.Request.Builder()
-            .url("https://upload-as0.qiniup.com")
-            .post(new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addPart(part)
-                .addFormDataPart("token", token)
-                .build())
-            .build();
-
-        okhttp3.Response uploadResp = client.newCall(uploadReq).execute();
-        try {
-            if (!uploadResp.isSuccessful()) throw new Exception("上传失败: " + uploadResp.code());
-            String respBody = uploadResp.body() != null ? uploadResp.body().string() : "";
-            com.google.gson.Gson gson = new com.google.gson.Gson();
-            Map<String, Object> result = gson.fromJson(respBody, Map.class);
-            if (result == null) throw new Exception("上传响应解析失败");
-            String key = (String) result.get("key");
-            return domain + "/" + key;
-        } finally {
-            uploadResp.close();
-            client.dispatcher().executorService().shutdown();
-            client.connectionPool().evictAll();
-        }
+        return QiniuHelper.uploadImage(getApplication(), file);
     }
 
     public void updateRecord(long id, String title, String content, String author,
                              String location, String mood, String moodIcon,
                              String recordDate, String imageUrls) {
         loading.setValue(true);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 DailyRecord record = new DailyRecord();
                 record.setTitle(title);
@@ -174,17 +129,17 @@ public class DailyViewModel extends AndroidViewModel {
                 loading.postValue(false);
                 errorMessage.postValue(e.getMessage());
             }
-        }).start();
+        });
     }
 
     public void deleteRecord(long id) {
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 repository.deleteRecord(id);
                 loadRecords(currentYear.getValue(), currentMonth.getValue());
             } catch (Exception e) {
                 errorMessage.postValue(e.getMessage());
             }
-        }).start();
+        });
     }
 }

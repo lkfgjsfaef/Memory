@@ -28,10 +28,11 @@ import com.niit.memory.data.model.CalendarNote;
 import com.niit.memory.data.model.Couple;
 import com.niit.memory.data.model.ImportantDate;
 import com.niit.memory.databinding.FragmentHomeBinding;
+import com.niit.memory.util.FileUtils;
+import com.niit.memory.util.ColorConstants;
 import com.niit.memory.util.SessionManager;
+import com.niit.memory.util.TaskExecutor;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -148,7 +149,7 @@ public class HomeFragment extends Fragment {
                     boolean isWeekend = col == 0 || col == 6;
 
                     if (isToday) {
-                        tv.setTextColor(0xFFE88D2E);
+                        tv.setTextColor(ColorConstants.ACCENT_ORANGE);
                         tv.setBackgroundColor(0x20FFE0A0);
                     } else if (isWeekend) {
                         tv.setTextColor(0xFFE8C0C0);
@@ -184,7 +185,7 @@ public class HomeFragment extends Fragment {
                     }
                     if (hasEvent) {
                         dot.setText("•");
-                        dot.setTextColor(0xFFFF9A9E);
+                        dot.setTextColor(ColorConstants.ACCENT_PINK);
                     } else {
                         dot.setText("");
                     }
@@ -368,21 +369,16 @@ public class HomeFragment extends Fragment {
         if (ctx == null) return;
         Toast.makeText(ctx, "上传中...", Toast.LENGTH_SHORT).show();
 
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
-                InputStream rawIs = ctx.getContentResolver().openInputStream(avatarFileUri);
-                if (rawIs == null) {
+                File tempFile;
+                try {
+                    tempFile = FileUtils.copyUriToTempFile(ctx, avatarFileUri);
+                } catch (Exception e) {
                     android.app.Activity activity = getActivity();
-                if (activity != null) activity.runOnUiThread(() ->
+                    if (activity != null) activity.runOnUiThread(() ->
                         Toast.makeText(ctx, "无法读取图片文件", Toast.LENGTH_SHORT).show());
                     return;
-                }
-                File tempFile = new File(ctx.getCacheDir(), "avatar_upload.jpg");
-                try (InputStream is = rawIs;
-                     FileOutputStream fos = new FileOutputStream(tempFile)) {
-                    byte[] buf = new byte[8192];
-                    int n;
-                    while ((n = is.read(buf)) != -1) fos.write(buf, 0, n);
                 }
 
                 String url = viewModel.uploadImage(tempFile);
@@ -406,7 +402,7 @@ public class HomeFragment extends Fragment {
                 if (activity != null) activity.runOnUiThread(() ->
                     Toast.makeText(ctx, "上传失败: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
-        }).start();
+        });
     }
 
     private void showImportantDateDialog(@Nullable ImportantDate existing) {
@@ -525,10 +521,10 @@ public class HomeFragment extends Fragment {
                     long days = diffMs / (1000 * 60 * 60 * 24);
                     binding.daysCount.setText(String.valueOf(days));
                 } catch (Exception e) {
-                    binding.daysCount.setText("2770");
+                    binding.daysCount.setText("--");
                 }
             } else {
-                binding.daysCount.setText("2770");
+                binding.daysCount.setText("--");
             }
         }
         if (c != null && c.getLoveStartDate() != null) {
@@ -546,7 +542,7 @@ public class HomeFragment extends Fragment {
         android.content.Context ctx = getContext();
         if (ctx == null) return;
         SessionManager sm = SessionManager.getInstance(ctx);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 com.niit.memory.data.repository.AuthRepository repo =
                     new com.niit.memory.data.repository.AuthRepository(ctx);
@@ -573,7 +569,7 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e(TAG, "Error loading avatars", e);
             }
-        }).start();
+        });
     }
 
     private void loadAvatarImage(android.widget.ImageView imageView, String url) {
@@ -613,13 +609,13 @@ public class HomeFragment extends Fragment {
             long dl = date.getDaysLeft() != null ? date.getDaysLeft() : 0;
             if (dl > 0) {
                 daysLeft.setText("还有 " + dl + " 天");
-                daysLeft.setTextColor(0xFFE88D2E);
+                daysLeft.setTextColor(ColorConstants.ACCENT_ORANGE);
             } else if (dl == 0) {
                 daysLeft.setText("就是今天!");
-                daysLeft.setTextColor(0xFF81C784);
+                daysLeft.setTextColor(ColorConstants.STATUS_COMPLETED);
             } else {
                 daysLeft.setText("已过");
-                daysLeft.setTextColor(0xFFC8BFB5);
+                daysLeft.setTextColor(ColorConstants.TEXT_MUTED);
             }
 
             long prog = 200 - dl;

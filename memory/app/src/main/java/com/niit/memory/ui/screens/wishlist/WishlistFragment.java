@@ -26,9 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.niit.memory.databinding.FragmentWishlistBinding;
 import com.niit.memory.ui.adapters.WishAdapter;
 import com.niit.memory.util.SessionManager;
+import com.niit.memory.util.FileUtils;
+import com.niit.memory.util.TaskExecutor;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -189,7 +189,9 @@ public class WishlistFragment extends Fragment {
         }
 
         // Author spinner
-        String[] authors = {"酱酱", "菲菲"};
+        SessionManager sm = SessionManager.getInstance(requireContext());
+        String myName = sm.getNickname() != null ? sm.getNickname() : "我";
+        String[] authors = {myName, "对方"};
         final android.widget.Spinner authorSpinner = new android.widget.Spinner(getContext());
         authorSpinner.setAdapter(new ArrayAdapter<>(getContext(),
             android.R.layout.simple_spinner_item, authors));
@@ -198,7 +200,6 @@ public class WishlistFragment extends Fragment {
                 if (authors[i].equals(existing.getAuthor())) { authorSpinner.setSelection(i); break; }
             }
         } else {
-            SessionManager sm = SessionManager.getInstance(requireContext());
             String nickname = sm.getNickname();
             if (nickname != null) {
                 for (int i = 0; i < authors.length; i++) {
@@ -385,27 +386,22 @@ public class WishlistFragment extends Fragment {
             }
         });
 
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             int successCount = 0;
             for (int i = 0; i < pendingImageUris.size(); i++) {
                 Uri uri = pendingImageUris.get(i);
                 final int idx = i + 1;
                 try {
-                    InputStream rawIs = ctx.getContentResolver().openInputStream(uri);
-                    if (rawIs == null) {
-                        Log.e(TAG, "uploadPendingImages: openInputStream null for index " + idx);
+                    File tempFile;
+                    try {
+                        tempFile = FileUtils.copyUriToTempFile(ctx, uri);
+                    } catch (Exception e) {
+                        Log.e(TAG, "uploadPendingImages: read failed for index " + idx, e);
                         if (act != null) act.runOnUiThread(() -> {
                             if (currentUploadBtn != null) currentUploadBtn.setText("⏳ 上传中 " + idx + "/" + total + "...");
                             Toast.makeText(ctx, "第" + idx + "张无法读取", Toast.LENGTH_SHORT).show();
                         });
                         continue;
-                    }
-                    File tempFile = new File(ctx.getCacheDir(), "wish_upload_" + System.currentTimeMillis() + ".jpg");
-                    try (InputStream is = rawIs;
-                         FileOutputStream fos = new FileOutputStream(tempFile)) {
-                        byte[] buf = new byte[8192];
-                        int n;
-                        while ((n = is.read(buf)) != -1) fos.write(buf, 0, n);
                     }
                     Log.d(TAG, "uploadPendingImages: index=" + idx + " tempFile size=" + tempFile.length());
 
@@ -447,7 +443,7 @@ public class WishlistFragment extends Fragment {
                 }
                 Toast.makeText(ctx, "上传完成 (" + uploaded + "/" + total + "张)", Toast.LENGTH_SHORT).show();
             });
-        }).start();
+        });
     }
 
     private void updateEmptyState(java.util.List<com.niit.memory.data.model.Wish> list) {

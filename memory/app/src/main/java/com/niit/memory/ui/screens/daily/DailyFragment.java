@@ -25,9 +25,9 @@ import com.niit.memory.R;
 import com.niit.memory.databinding.DialogDailyFormBinding;
 import com.niit.memory.databinding.FragmentDailyBinding;
 import com.niit.memory.ui.adapters.DailyRecordAdapter;
+import com.niit.memory.util.FileUtils;
+import com.niit.memory.util.TaskExecutor;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -340,25 +340,20 @@ public class DailyFragment extends Fragment {
         final int total = pendingImageUris.size();
         Toast.makeText(ctx, "正在上传 0/" + total + "...", Toast.LENGTH_SHORT).show();
 
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             int successCount = 0;
             for (int i = 0; i < pendingImageUris.size(); i++) {
                 Uri uri = pendingImageUris.get(i);
                 final int idx = i + 1;
                 try {
-                    InputStream rawIs = ctx.getContentResolver().openInputStream(uri);
-                    if (rawIs == null) {
+                    File tempFile;
+                    try {
+                        tempFile = FileUtils.copyUriToTempFile(ctx, uri);
+                    } catch (Exception e) {
                         android.app.Activity act = getActivity();
                         if (act != null) act.runOnUiThread(() ->
                             Toast.makeText(ctx, "第" + idx + "张无法读取", Toast.LENGTH_SHORT).show());
                         continue;
-                    }
-                    File tempFile = new File(ctx.getCacheDir(), "daily_upload_" + System.currentTimeMillis() + ".jpg");
-                    try (InputStream is = rawIs;
-                         FileOutputStream fos = new FileOutputStream(tempFile)) {
-                        byte[] buf = new byte[8192];
-                        int n;
-                        while ((n = is.read(buf)) != -1) fos.write(buf, 0, n);
                     }
 
                     String url = viewModel.uploadImage(tempFile);
@@ -398,7 +393,7 @@ public class DailyFragment extends Fragment {
                 }
                 if (currentPreviewUpdater != null) currentPreviewUpdater.run();
             });
-        }).start();
+        });
     }
 
     private void observeViewModel() {

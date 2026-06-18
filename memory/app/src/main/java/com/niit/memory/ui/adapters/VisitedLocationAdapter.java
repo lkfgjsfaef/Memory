@@ -8,9 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import coil.Coil;
-import coil.request.ImageRequest;
 import com.niit.memory.R;
+import com.niit.memory.util.CoilHelper;
 import com.niit.memory.data.model.VisitedLocation;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,13 +63,8 @@ public class VisitedLocationAdapter extends RecyclerView.Adapter<VisitedLocation
         if (imgUrl != null && !imgUrl.isEmpty()) {
             Log.d("VisitedLocationAdapter", "Loading image: " + imgUrl);
             holder.image.setVisibility(View.VISIBLE);
-            ImageRequest req = new ImageRequest.Builder(holder.itemView.getContext())
-                .data(imgUrl)
-                .target(holder.image)
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_placeholder)
-                .build();
-            Coil.imageLoader(holder.itemView.getContext()).enqueue(req);
+            CoilHelper.loadImage(holder.itemView.getContext(), imgUrl, holder.image,
+                R.drawable.image_placeholder, R.drawable.image_placeholder);
         } else {
             holder.image.setVisibility(View.GONE);
         }

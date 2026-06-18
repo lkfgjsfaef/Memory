@@ -2,7 +2,9 @@ package com.niit.memory.ui.screens.momentdetail;
 
 import androidx.appcompat.app.AlertDialog;
 import android.net.Uri;
+import com.niit.memory.util.FileUtils;
 import com.niit.memory.util.ImageViewer;
+import com.niit.memory.util.TaskExecutor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +25,6 @@ import com.niit.memory.data.model.MemoryMoment;
 import com.niit.memory.databinding.ActivityMomentDetailBinding;
 import com.niit.memory.ui.components.MusicBarHelper;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -200,7 +200,7 @@ public class MomentDetailActivity extends AppCompatActivity {
 
     private void onPhotoPicked(Uri uri) {
         if (uri == null) return;
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 File file = copyUriToTempFile(uri);
                 String url = viewModel.uploadImage(file);
@@ -217,7 +217,7 @@ public class MomentDetailActivity extends AppCompatActivity {
             } catch (Exception e) {
                 runOnUiThread(() -> Toast.makeText(this, "上传失败: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
-        }).start();
+        });
     }
 
     private void removePhoto(int index) {
@@ -245,18 +245,7 @@ public class MomentDetailActivity extends AppCompatActivity {
     }
 
     private File copyUriToTempFile(Uri uri) throws Exception {
-        File file = File.createTempFile("upload_", ".jpg", getCacheDir());
-        InputStream is = getContentResolver().openInputStream(uri);
-        if (is == null) {
-            file.delete();
-            throw new Exception("无法读取图片文件");
-        }
-        try (is; FileOutputStream fos = new FileOutputStream(file)) {
-            byte[] buf = new byte[8192];
-            int n;
-            while ((n = is.read(buf)) != -1) fos.write(buf, 0, n);
-        }
-        return file;
+        return FileUtils.copyUriToTempFile(this, uri);
     }
 
     private class PhotoAdapter extends BaseAdapter {

@@ -9,9 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import coil.Coil;
-import coil.request.ImageRequest;
 import com.niit.memory.R;
+import com.niit.memory.util.CoilHelper;
 import com.niit.memory.data.model.Wish;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,13 +101,8 @@ public class WishAdapter extends RecyclerView.Adapter<WishAdapter.ViewHolder> {
                     lp.setMargins(0, 0, 8, 0);
                     iv.setLayoutParams(lp);
                     iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    ImageRequest req = new ImageRequest.Builder(holder.itemView.getContext())
-                        .data(trimmed)
-                        .target(iv)
-                        .placeholder(R.drawable.image_placeholder)
-                        .error(R.drawable.image_placeholder)
-                        .build();
-                    Coil.imageLoader(holder.itemView.getContext()).enqueue(req);
+                    CoilHelper.loadImage(holder.itemView.getContext(), trimmed, iv,
+                        R.drawable.image_placeholder, R.drawable.image_placeholder);
                     holder.imagesContainer.addView(iv);
                 }
             }

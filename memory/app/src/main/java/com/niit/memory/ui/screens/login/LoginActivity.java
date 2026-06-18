@@ -16,7 +16,9 @@ import com.niit.memory.data.api.AuthService;
 import com.niit.memory.data.model.ApiResponse;
 import com.niit.memory.data.model.AvatarsInfo;
 import com.niit.memory.databinding.ActivityLoginBinding;
+import com.niit.memory.util.ColorConstants;
 import com.niit.memory.util.SessionManager;
+import com.niit.memory.util.TaskExecutor;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -70,9 +72,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateCardSelection(boolean isHis) {
-        int selectedStrokeColor = 0xFF9A9E;
+        int selectedStrokeColor = ColorConstants.CARD_SELECTED_STROKE;
         int selectedStrokeWidth = 3;
-        int defaultStrokeColor = 0xFFF0E8DD;
+        int defaultStrokeColor = ColorConstants.CARD_DEFAULT_STROKE;
         int defaultStrokeWidth = 1;
 
         MaterialCardView hisCard = binding.userCardHis;
@@ -93,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loadCachedAvatars() {
         SessionManager sm = SessionManager.getInstance(this);
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             try {
                 AuthService authService = ApiClient.getInstance(this).create(AuthService.class);
                 retrofit2.Response<ApiResponse<AvatarsInfo>> resp = authService.getAvatars().execute();
@@ -109,14 +111,15 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                android.util.Log.w("LoginActivity", "Failed to load avatars from server, using cache", e);
             }
             // Fallback to local cache (works after first successful API call)
             runOnUiThread(() -> {
                 loadAvatarImage(binding.userAvatarHis, sm.getHisAvatarUrl());
                 loadAvatarImage(binding.userAvatarHer, sm.getHerAvatarUrl());
             });
-        }).start();
+        });
     }
 
     private void loadAvatarImage(android.widget.ImageView imageView, String url) {

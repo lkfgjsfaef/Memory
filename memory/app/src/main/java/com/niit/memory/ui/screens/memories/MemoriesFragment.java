@@ -30,9 +30,9 @@ import com.niit.memory.ui.adapters.MomentAdapter;
 import com.niit.memory.ui.adapters.VisitedLocationAdapter;
 import com.niit.memory.ui.screens.albumdetail.AlbumDetailActivity;
 import com.niit.memory.ui.screens.momentdetail.MomentDetailActivity;
+import com.niit.memory.util.FileUtils;
+import com.niit.memory.util.TaskExecutor;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -814,26 +814,21 @@ public class MemoriesFragment extends Fragment {
         Log.d(TAG, "uploadPendingImages: START count=" + total + " target=" + imageTarget);
         Toast.makeText(ctx, "正在上传 0/" + total + "...", Toast.LENGTH_SHORT).show();
 
-        new Thread(() -> {
+        TaskExecutor.execute(() -> {
             int successCount = 0;
             for (int i = 0; i < pendingImageUris.size(); i++) {
                 Uri uri = pendingImageUris.get(i);
                 final int idx = i + 1;
                 try {
-                    InputStream rawIs = ctx.getContentResolver().openInputStream(uri);
-                    if (rawIs == null) {
-                        Log.e(TAG, "uploadPendingImages: openInputStream null for index " + idx);
+                    File tempFile;
+                    try {
+                        tempFile = FileUtils.copyUriToTempFile(ctx, uri);
+                    } catch (Exception e) {
+                        Log.e(TAG, "uploadPendingImages: read failed for index " + idx, e);
                         android.app.Activity act = getActivity();
                         if (act != null) act.runOnUiThread(() ->
                             Toast.makeText(ctx, "第" + idx + "张无法读取", Toast.LENGTH_SHORT).show());
                         continue;
-                    }
-                    File tempFile = new File(ctx.getCacheDir(), "mem_upload_" + System.currentTimeMillis() + ".jpg");
-                    try (InputStream is = rawIs;
-                         FileOutputStream fos = new FileOutputStream(tempFile)) {
-                        byte[] buf = new byte[8192];
-                        int n;
-                        while ((n = is.read(buf)) != -1) fos.write(buf, 0, n);
                     }
                     Log.d(TAG, "uploadPendingImages: index=" + idx + " tempFile size=" + tempFile.length());
 
@@ -882,7 +877,7 @@ public class MemoriesFragment extends Fragment {
             if (act != null) act.runOnUiThread(() -> {
                 Toast.makeText(ctx, "上传完成 (" + uploaded + "/" + total + "张)", Toast.LENGTH_SHORT).show();
             });
-        }).start();
+        });
     }
 
     private void addFormLabel(LinearLayout parent, String text) {
