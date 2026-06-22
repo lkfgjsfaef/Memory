@@ -22,7 +22,7 @@ A couple's memory-sharing app — track daily records, important dates (with cou
 ./mvnw package -DskipTests      # Package JAR
 ```
 
-Requires MySQL with database `memory_db`. Default: `root` / `123456` on `localhost:3306`.
+Requires MySQL with database `memory_db`. See `application-sample.yml` for configuration template.
 Run `src/main/resources/memory_db.sql` (full Navicat dump: DDL + seed data) to initialize tables and seed data.
 Tests are minimal (single `contextLoads` smoke test).
 
@@ -166,7 +166,7 @@ com.niit.memory/
 - `LoginActivity` sends credentials → receives JWT token → `SessionManager` persists token, userId, nickname to DataStore
 - `AuthInterceptor` attaches `Bearer` token to all Retrofit requests
 - Logout: clears session → redirects to `LoginActivity`
-- Two accounts: "酱酱" (jiangjiang) and "菲菲" (feifei)
+- Two preset demo accounts (configurable in LoginActivity / LoginView)
 
 #### Image Upload Flow
 

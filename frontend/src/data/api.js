@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://47.95.120.193:8081/api',
+  baseURL: '/api',  // 开发时 Vite proxy 转发到后端，生产环境需修改为实际后端地址
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' }
 })
