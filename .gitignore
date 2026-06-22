@@ -4,6 +4,22 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Application config (contains secrets)
+application.yml
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Compiled class files
+*.class
+
+# Claude local settings
+.claude/settings.local.json
+
+# Uploads
+uploads/
+
 ### STS ###
 .apt_generated
 .classpath

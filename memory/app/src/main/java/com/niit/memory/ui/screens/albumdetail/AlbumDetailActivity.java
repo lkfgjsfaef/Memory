@@ -23,7 +23,6 @@ import coil.request.ImageRequest;
 import com.niit.memory.R;
 import com.niit.memory.data.model.MemoryAlbum;
 import com.niit.memory.databinding.ActivityAlbumDetailBinding;
-import com.niit.memory.ui.components.MusicBarHelper;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ public class AlbumDetailActivity extends AppCompatActivity {
 
     private ActivityAlbumDetailBinding binding;
     private AlbumDetailViewModel viewModel;
-    private MusicBarHelper musicBarHelper;
     private long albumId;
     private List<String> photoList = new ArrayList<>();
     private PhotoAdapter photoAdapter;
@@ -61,9 +59,6 @@ public class AlbumDetailActivity extends AppCompatActivity {
 
         binding.albumEditBtn.setOnClickListener(v -> showEditDialog());
         binding.albumAddPhotoBtn.setOnClickListener(v -> photoPicker.launch("image/*"));
-
-        musicBarHelper = new MusicBarHelper(this);
-        musicBarHelper.setup();
     }
 
     private void observeViewModel() {
@@ -317,9 +312,4 @@ public class AlbumDetailActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (musicBarHelper != null) musicBarHelper.onDestroy();
-    }
 }

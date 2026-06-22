@@ -9,7 +9,6 @@
       </router-view>
     </main>
     <Toast />
-    <MusicPlayer v-if="route.name !== 'login'" />
   </div>
 </template>
 
@@ -17,7 +16,6 @@
 import { useRoute } from 'vue-router'
 import NavBar from './components/NavBar.vue'
 import Toast from './components/Toast.vue'
-import MusicPlayer from './components/MusicPlayer.vue'
 
 const route = useRoute()
 </script>

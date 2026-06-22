@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A couple's memory-sharing app — track daily records, important dates (with countdown), wish lists, memory timelines, photo albums, visited locations on a map, calendar mood tracking, and a shared music playlist.
+A couple's memory-sharing app — track daily records, important dates (with countdown), wish lists, memory timelines, photo albums, visited locations on a map, and calendar mood tracking with custom emojis.
 
 - **Backend**: Spring Boot 3.5.14 with raw JDBC (port 8081)
 - **Web frontend**: Vue 3 + Vite (`frontend/`)
@@ -23,7 +23,7 @@ A couple's memory-sharing app — track daily records, important dates (with cou
 ```
 
 Requires MySQL with database `memory_db`. Default: `root` / `123456` on `localhost:3306`.
-Run `src/main/resources/schema.sql` to initialize tables and seed data.
+Run `src/main/resources/memory_db.sql` (full Navicat dump: DDL + seed data) to initialize tables and seed data.
 Tests are minimal (single `contextLoads` smoke test).
 
 ### Web Frontend (Vue 3 + Vite)
@@ -84,7 +84,6 @@ Standard three-tier: **Controller → Service → Repository (raw JDBC)**
 JWT-based auth via `JwtInterceptor` (registered in `WebConfig`). All `/api/**` requests pass through except:
 - `OPTIONS` (CORS preflight)
 - `POST /api/auth/login`
-- `GET /api/music/playlist`
 
 The interceptor extracts `Bearer` token from `Authorization` header, validates via `JwtUtil`, stores `userId`/`username` in `UserContext` (ThreadLocal). Passwords are BCrypt-encoded.
 
@@ -98,7 +97,7 @@ The interceptor extracts `Bearer` token from `Authorization` header, validates v
 | `CalendarController` | `/api/calendar` | notes (CRUD by year/month), moods (upsert by date) |
 | `WishController` | `/api/wishes` | CRUD + stats (filterable by status/category) |
 | `MemoryController` | `/api` | albums, moments, locations (CRUD) |
-| `MusicController` | `/api/music` | search (NetEase API proxy), playlist (GET/PUT) |
+| `CustomEmojiController` | `/api/custom-emojis` | CRUD (shared emoji pool, no auth required) |
 | `QiniuController` | `/api/qiniu` | upload-token |
 
 ### Android Architecture
@@ -116,7 +115,7 @@ com.niit.memory/
 ├── ui/
 │   ├── screens/      # One package per screen (Fragment + ViewModel)
 │   │   ├── home/     # HomeFragment, HomeViewModel
-│   │   ├── daily/    # DailyFragment, DailyDetailActivity, DailyViewModel
+│   │   ├── daily/    # DailyFragment, DailyPublishActivity, DailyDetailActivity, DailyViewModel
 │   │   ├── calendar/ # CalendarFragment, CalendarViewModel
 │   │   ├── wishlist/ # WishlistFragment, WishlistViewModel
 │   │   ├── memories/ # MemoriesFragment, MemoriesViewModel
@@ -124,9 +123,9 @@ com.niit.memory/
 │   │   ├── albumdetail/  # AlbumDetailActivity, AlbumDetailViewModel
 │   │   └── momentdetail/ # MomentDetailActivity, MomentDetailViewModel
 │   ├── adapters/     # RecyclerView adapters
-│   └── components/   # MusicBarHelper, MusicPlayerViewModel
-├── util/             # SessionManager, ImageViewer
-├── MainActivity.java     # Container: bottom nav + music bar + logout
+│   └── widget/       # NonScrollGridView (calendar grid)
+├── util/             # SessionManager, ImageViewer, QiniuHelper, CoilHelper, TaskExecutor, etc.
+├── MainActivity.java     # Container: bottom nav + logout
 └── MemoryApplication.java
 ```
 
@@ -137,7 +136,6 @@ com.niit.memory/
 | Retrofit + OkHttp + Gson | HTTP client, connects to backend at `10.0.2.2:8081` |
 | Coil 2.7 | Image loading (thumbnail, placeholder, error fallback) |
 | OSMDroid 6.1 | Map with Amap tile source (visited locations) |
-| Media3 ExoPlayer 1.5 | Music playback |
 | Qiniu Android SDK 8.2 | Direct-to-cloud image upload |
 | Material 1.12 | Material Design 3 components |
 | Navigation 2.8 | Bottom nav + nav_graph.xml |
@@ -157,6 +155,7 @@ com.niit.memory/
 
 **Detail activities** (navigated via Intent, not nav graph):
 - `DailyDetailActivity` — full daily record view
+- `DailyPublishActivity` — create/edit daily record with image upload
 - `AlbumDetailActivity` — album photos + cover management
 - `MomentDetailActivity` — single moment detail
 
@@ -188,17 +187,17 @@ Each ViewModel has its own `uploadImage(File)` method (duplicated logic — the 
 - `src/stores/userStore.js` — auth state in localStorage
 - `src/data/mock.js` — mock data fallback
 - `src/composables/` — `useToast.js`, `useApi.js`, `useUpload.js` (Qiniu SDK), `useImageCompress.js`
-- Shared components: `NavBar.vue`, `StatsCard.vue`, `Modal.vue`, `Toast.vue`, `MusicPlayer.vue`
+- Shared components: `NavBar.vue`, `StatsCard.vue`, `Modal.vue`, `Toast.vue`
 - Images uploaded via Qiniu SDK: get token from backend → upload directly → store URL
 - Local file serving: `WebConfig` maps `/uploads/**` to `app.upload.path` (default `./uploads`)
 
 ### Database
 
 11 tables in `memory_db` with `utf8mb4` encoding:
-`users`, `couple`, `important_date`, `daily_record`, `wish`, `calendar_note`, `calendar_mood`, `memory_album`, `memory_moment`, `visited_location`, `music_playlist`
+`users`, `couple`, `important_date`, `daily_record`, `wish`, `calendar_note`, `calendar_mood`, `memory_album`, `memory_moment`, `visited_location`, `custom_emoji`
 
-- `schema.sql` is idempotent (drops/recreates tables + seed data)
-- Incremental migrations in `src/main/resources/update_*.sql`
+- `memory_db.sql` is a full Navicat dump (DDL + seed data for all tables)
+- Incremental migration in `src/main/resources/update_20260618.sql` (removed music_playlist, added custom_emoji)
 
 ### Package Naming
 
@@ -210,13 +209,14 @@ The Maven artifactId is `menmory` (typo), but the Java package is `com.niit.memo
 - No JPA/Hibernate — raw JDBC via `JdbcTemplate`, SQL hand-written in repositories
 - No input validation — entities have no validation annotations
 - JWT authentication — stateless, ThreadLocal `UserContext`
-- Global music playlist — shared across all users
+- Custom emoji pool is shared across both users (no per-user ownership)
 - Constructor injection throughout (no `@Autowired` fields)
 - CORS wide open — all origins, methods, headers
+- `CustomEmojiController` skips the service layer (controller → repository directly)
 
 ### Android
 - No dependency injection framework — manual singleton (`ApiClient`) and constructor injection
-- Background threads via `new Thread()` (no coroutines, no RxJava for data flow)
+- Background threads via `new Thread()` or `TaskExecutor` (no coroutines, no RxJava)
 - Each ViewModel duplicates `uploadImage()` (Qiniu token + upload logic)
 - Multi-select images via `GetMultipleContents()`, sequential upload in background thread
 - `SessionManager` wraps DataStore for token persistence

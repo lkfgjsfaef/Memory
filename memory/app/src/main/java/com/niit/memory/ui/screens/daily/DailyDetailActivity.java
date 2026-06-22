@@ -5,25 +5,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import coil.Coil;
 import coil.request.ImageRequest;
 import com.niit.memory.R;
+import com.niit.memory.data.api.ApiClient;
+import com.niit.memory.data.api.DailyService;
+import com.niit.memory.data.model.ApiResponse;
 import com.niit.memory.data.model.DailyRecord;
 import com.niit.memory.databinding.ActivityDailyDetailBinding;
-import com.niit.memory.ui.components.MusicBarHelper;
 import com.niit.memory.util.ImageViewer;
+import com.niit.memory.util.TaskExecutor;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DailyDetailActivity extends AppCompatActivity {
 
     private ActivityDailyDetailBinding binding;
-    private MusicBarHelper musicBarHelper;
     private List<String> photoList = new ArrayList<>();
     private PhotoAdapter photoAdapter;
+    private long recordId;
+    private DailyRecord currentRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +43,12 @@ public class DailyDetailActivity extends AppCompatActivity {
             finish();
             return;
         }
-
+        currentRecord = record;
+        recordId = record.getId() != null ? record.getId() : 0;
         displayRecord(record);
-
-        musicBarHelper = new MusicBarHelper(this);
-        musicBarHelper.setup();
     }
 
     private void displayRecord(DailyRecord r) {
-        // Mood icon + text in meta row
         if (r.getMoodIcon() != null && !r.getMoodIcon().isEmpty()) {
             binding.dailyMoodIcon.setText(r.getMoodIcon());
         } else {
@@ -68,7 +69,6 @@ public class DailyDetailActivity extends AppCompatActivity {
             binding.dailyContent.setVisibility(View.GONE);
         }
 
-        // Photos
         String photos = r.getImageUrls();
         photoList.clear();
         if (photos != null && !photos.isEmpty()) {
@@ -87,6 +87,50 @@ public class DailyDetailActivity extends AppCompatActivity {
         binding.dailyPhotosGrid.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
         binding.dailyPhotosSpacer.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
         binding.dailyNoPhotos.setVisibility(count > 0 ? View.GONE : View.VISIBLE);
+    }
+
+    private void removePhoto(int index) {
+        if (recordId == 0) {
+            Toast.makeText(this, "记录ID无效", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // Build new imageUrls string without the removed URL
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < photoList.size(); i++) {
+            if (i == index) continue;
+            if (sb.length() > 0) sb.append(",");
+            sb.append(photoList.get(i));
+        }
+        String newUrls = sb.toString();
+
+        // Update backend first (send full record to avoid NOT NULL constraint violations)
+        TaskExecutor.execute(() -> {
+            try {
+                DailyService service = ApiClient.getInstance(DailyDetailActivity.this)
+                    .create(DailyService.class);
+                currentRecord.setImageUrls(newUrls);
+                retrofit2.Response<ApiResponse<DailyRecord>> resp =
+                    service.updateRecord(recordId, currentRecord).execute();
+                if (resp.isSuccessful() && resp.body() != null && resp.body().isSuccess()) {
+                    runOnUiThread(() -> {
+                        photoList.remove(index);
+                        photoAdapter.notifyDataSetChanged();
+                        int count = photoList.size();
+                        binding.dailyPhotoCount.setText(count + " 张");
+                        boolean hasPhotos = count > 0;
+                        binding.dailyPhotosGrid.setVisibility(hasPhotos ? View.VISIBLE : View.GONE);
+                        binding.dailyPhotosSpacer.setVisibility(hasPhotos ? View.VISIBLE : View.GONE);
+                        binding.dailyNoPhotos.setVisibility(hasPhotos ? View.GONE : View.VISIBLE);
+                    });
+                } else {
+                    runOnUiThread(() ->
+                        Toast.makeText(DailyDetailActivity.this, "删除失败，请重试", Toast.LENGTH_SHORT).show());
+                }
+            } catch (Exception e) {
+                runOnUiThread(() ->
+                    Toast.makeText(DailyDetailActivity.this, "删除失败，请重试", Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
     private class PhotoAdapter extends BaseAdapter {
@@ -116,13 +160,17 @@ public class DailyDetailActivity extends AppCompatActivity {
                     .build()
             );
             iv.setOnClickListener(v -> ImageViewer.show(DailyDetailActivity.this, photoList, pos));
+            iv.setOnLongClickListener(v -> {
+                new AlertDialog.Builder(DailyDetailActivity.this)
+                    .setTitle("删除照片")
+                    .setMessage("确定要删除这张照片吗？")
+                    .setPositiveButton("删除", (d, w) -> removePhoto(pos))
+                    .setNegativeButton("取消", null)
+                    .show();
+                return true;
+            });
             return iv;
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (musicBarHelper != null) musicBarHelper.onDestroy();
-    }
 }
