@@ -137,7 +137,7 @@ const previewImage = ref(null)
 const moods = ['开心','难过','兴奋','感动','平静','幸福','想他','撒娇']
 const moodIcons = ['😊','😢','🎉','🥰','😌','💕','🥺','😋']
 
-const myName = userStore.state.nickname || '酱酱'
+const myName = userStore.state.nickname || '用户A'
 const emptyForm = () => ({ title: '', content: '', author: myName, location: '', mood: '开心', moodIcon: '😊', recordDate: new Date().toISOString().slice(0, 10), imageUrls: '' })
 const form = ref(emptyForm())
 

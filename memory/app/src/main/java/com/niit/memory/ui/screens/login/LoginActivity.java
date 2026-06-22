@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private LoginViewModel viewModel;
-    private String selectedUser = "jiangjiang";
+    private String selectedUser = "user1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +58,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupUserCards() {
-        // Default: select jiangjiang
+        // Default: select user1
         updateCardSelection(true);
 
         binding.userCardHis.setOnClickListener(v -> {
-            selectedUser = "jiangjiang";
+            selectedUser = "user1";
             updateCardSelection(true);
         });
         binding.userCardHer.setOnClickListener(v -> {
-            selectedUser = "feifei";
+            selectedUser = "user2";
             updateCardSelection(false);
         });
     }

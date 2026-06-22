@@ -80,7 +80,7 @@
         <div><label>状态</label><select v-model="form.status"><option value="pending">待实现</option><option value="completed">已完成</option></select></div>
       </div>
       <div class="form-row">
-        <div><label>发起人</label><select v-model="form.author"><option value="酱酱">酱酱</option><option value="菲菲">菲菲</option></select></div>
+        <div><label>发起人</label><select v-model="form.author"><option value="用户A">用户A</option><option value="用户B">用户B</option></select></div>
         <div><label>发起日期</label><input type="date" v-model="form.startDate" /></div>
       </div>
       <label>配图（可上传多张）</label>
@@ -134,7 +134,7 @@ const displayWishes = computed(() => {
 
 const showModal = ref(false); const modalTitle = ref('添加心愿')
 const editingId = ref(null); const saving = ref(false)
-const emptyForm = () => ({ title: '', description: '', category: '未来规划', status: 'pending', author: userStore.state.nickname || '酱酱', startDate: new Date().toISOString().slice(0, 10), imageUrls: '' })
+const emptyForm = () => ({ title: '', description: '', category: '未来规划', status: 'pending', author: userStore.state.nickname || '用户A', startDate: new Date().toISOString().slice(0, 10), imageUrls: '' })
 const form = ref(emptyForm())
 
 function openCreate() { editingId.value = null; form.value = emptyForm(); modalTitle.value = '添加心愿'; showModal.value = true }

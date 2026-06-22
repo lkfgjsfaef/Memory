@@ -93,7 +93,7 @@
                             android:layout_marginBottom="2dp" />
                         <TextView android:id="@+id/user_card_his_name"
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="酱酱" android:textSize="13sp" android:textColor="@color/text_primary" />
+                            android:text="用户A" android:textSize="13sp" android:textColor="@color/text_primary" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="他" android:textSize="11sp" android:textColor="@color/text_secondary" />
                     </LinearLayout>
@@ -127,7 +127,7 @@
                             android:layout_marginBottom="2dp" />
                         <TextView android:id="@+id/user_card_her_name"
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="菲菲" android:textSize="13sp" android:textColor="@color/text_primary" />
+                            android:text="用户B" android:textSize="13sp" android:textColor="@color/text_primary" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="她" android:textSize="11sp" android:textColor="@color/text_secondary" />
                     </LinearLayout>

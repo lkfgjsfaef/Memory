@@ -49,11 +49,11 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const users = [
-  { username: 'jiangjiang', nickname: '酱酱', avatar: '👦' },
-  { username: 'feifei', nickname: '菲菲', avatar: '👧' }
+  { username: 'user1', nickname: '用户A', avatar: '👦' },
+  { username: 'user2', nickname: '用户B', avatar: '👧' }
 ]
 
-const form = reactive({ username: 'jiangjiang', password: '' })
+const form = reactive({ username: 'user1', password: '' })
 const loading = ref(false)
 const error = ref('')
 
